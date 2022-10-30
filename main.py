@@ -1,11 +1,16 @@
+import cyrtranslit
 import pdfplumber
 import timeit
 import json
 
-WORD_COUNTER = 1
+WORD_COUNTER = 0
 BOTTOM = 14
 TOP = 510
 
+
+def to_cyrillic(string):
+    cyrillic = cyrtranslit.to_cyrillic(string, "ru")
+    return cyrillic
 
 def parser(path, from_page, to_page):
     word_dicts = []
@@ -31,12 +36,18 @@ def parser(path, from_page, to_page):
                     if right == ",":
                         word_dicts.append({
                             "id": WORD_COUNTER,
-                            "word": text[:-1]
+                            "word": {
+                                "lat": text[:-1],
+                                "cyr": to_cyrillic(text[:-1])
+                            }
                         })
                     else:
                         word_dicts.append({
                             "id": WORD_COUNTER,
-                            "word": text
+                            "word": {
+                                "lat": text,
+                                "cyr": to_cyrillic(text)
+                            }
                         })
             except:
                 print('PageError at #', i)
