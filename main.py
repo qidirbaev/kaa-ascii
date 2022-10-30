@@ -2,7 +2,7 @@ import pdfplumber
 import timeit
 import json
 
-WORD_COUNTER = 0
+WORD_COUNTER = 1
 BOTTOM = 14
 TOP = 510
 
@@ -25,17 +25,19 @@ def parser(path, from_page, to_page):
                     if not left.isalpha() or right.endswith(".") or len(text) < 3:
                         continue
 
+                    global WORD_COUNTER
+                    WORD_COUNTER += 1
+
                     if right == ",":
                         word_dicts.append({
+                            "id": WORD_COUNTER,
                             "word": text[:-1]
                         })
                     else:
                         word_dicts.append({
+                            "id": WORD_COUNTER,
                             "word": text
                         })
-
-                    global WORD_COUNTER
-                    WORD_COUNTER += 1
             except:
                 print('PageError at #', i)
                 break
